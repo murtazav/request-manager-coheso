@@ -1,11 +1,12 @@
 {
-    "users": [
-
-    ],
-    "requests": [
-
-    ],
-    "requestTypes": [
-
-    ]
+  "users": [
+    {
+      "id": 1725914454786,
+      "email": "john@acme.inc",
+      "passwordHashed": "123456",
+      "createdAt": 1725914454786
+    }
+  ],
+  "requests": [],
+  "requestTypes": []
 }
