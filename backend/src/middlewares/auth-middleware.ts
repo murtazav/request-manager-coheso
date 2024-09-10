@@ -4,7 +4,7 @@ import jwt from '../lib/jwt';
 import { User } from '../types';
 
 export interface CustomRequest extends Request {
-    user?: User;
+    user?: Partial<User>;
 }
 
 export const verifyToken = (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -15,9 +15,8 @@ export const verifyToken = (req: CustomRequest, res: Response, next: NextFunctio
         }
         // Verify token
         const decoded = jwt.verify(token);
-        
         // Attach user to request
-        req.user = decoded.user;
+        req.user = { id: decoded.id, email: decoded.email };
         next();
     }
     catch (error) {

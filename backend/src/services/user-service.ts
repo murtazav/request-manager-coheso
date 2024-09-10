@@ -2,7 +2,6 @@ import { User } from "../types/user";
 import { DB_ERROR_MESSAGE } from "../utils/constants";
 import { addToCollection, getByFilter } from "./db";
 
-
 export const createUser = async (user: User): Promise<void> => {
     try {   
         await addToCollection("users", user);
