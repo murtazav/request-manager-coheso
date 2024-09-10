@@ -1,5 +1,5 @@
 import path from "path";
-const dataFilePath = path.join(__dirname, 'db.json');
+const dataFilePath = path.join(process.cwd(), 'db.json');
 import { promises as fs } from 'fs';
 
 export type Collection = 'users' | 'dataRequests' | 'requestTypes';

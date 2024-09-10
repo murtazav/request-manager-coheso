@@ -4,7 +4,8 @@ import { columns } from "./Columns";
 import { DataTable } from "./DataTable";
 import Header from "./Header";
 import { getDataRequestsApi } from "@/services/api-services";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import ProtectedComponent from "@/components/custom/ProtectedComponent";
 
 const Dashboard: React.FC = () => {
     const [data, setData] = useState<DataRequest[]>([]);
@@ -30,4 +31,12 @@ const Dashboard: React.FC = () => {
     );
 };
 
-export default Dashboard;
+const ProtectedDashboard = () => {
+    return (
+        <ProtectedComponent>
+            <Dashboard />
+        </ProtectedComponent>
+    );
+};
+
+export default ProtectedDashboard;

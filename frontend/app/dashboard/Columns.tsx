@@ -4,15 +4,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { DataRequest } from "@/types/data-request";
-import { useRouter } from "next/navigation";
 import { deleteDataRequestApi } from "@/services/api-services";
 
 export const columns: ColumnDef<DataRequest>[] = [
@@ -29,16 +22,14 @@ export const columns: ColumnDef<DataRequest>[] = [
         header: "Created At",
         cell: ({ row }) => {
             const request = row.original;
-            return request?.createdAt ? new Date(request.createdAt).toLocaleDateString() : '';
+            return request?.createdAt ? new Date(request.createdAt).toLocaleDateString() : "";
         },
     },
     {
         header: "Actions",
         id: "actions",
         cell: ({ row }) => {
-            const router = useRouter();
             const dataRequest = row.original;
-
             const deleteDataRequest = async () => {
                 try {
                     await deleteDataRequestApi(dataRequest.id as number);
@@ -46,7 +37,7 @@ export const columns: ColumnDef<DataRequest>[] = [
                 } catch (error) {
                     console.error(error);
                 }
-            }
+            };
 
             return (
                 <DropdownMenu>
@@ -61,9 +52,14 @@ export const columns: ColumnDef<DataRequest>[] = [
                         <DropdownMenuItem onClick={() => navigator.clipboard.writeText(dataRequest?.id?.toString() ?? "")}>
                             Copy Request ID
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={()=>{
-                            router.push(`/add-or-update-request?id=${dataRequest?.id}`);
-                        }}>Update</DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() => {
+                                // router.push(`/add-or-update-request?id=${dataRequest?.id}`);
+                                window.history.pushState({}, "", `/add-or-update-request?id=${dataRequest?.id}`);
+                            }}
+                        >
+                            Update
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={deleteDataRequest}>Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

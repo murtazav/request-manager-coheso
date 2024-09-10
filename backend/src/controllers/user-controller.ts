@@ -8,6 +8,9 @@ import { AuthMiddleware } from "../middlewares";
 export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     try {
+        if (!email || !password) {
+            return res.status(400).send("Invalid input");
+        }
         const user = await UserService.getUserByEmail(email);
         if (!user) {
             return res.status(401).send("User not found");
@@ -22,13 +25,16 @@ export const login = async (req: Request, res: Response) => {
 }
 
 export const signup = async (req: Request, res: Response) => {
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
     try {
+        if(!email || !password) {
+            return res.status(400).send("Invalid input");
+        }
         const user = await UserService.getUserByEmail(email);
         if (user) {
             return res.status(409).send("User already exists");
         }
-        const newUser = {  id: Date.now(), name, email, passwordHashed: password, createdAt: Date.now() };
+        const newUser = {  id: Date.now(), email, passwordHashed: password, createdAt: Date.now() };
         await UserService.createUser(newUser);
         const token = jwt.sign({ id: newUser.id, email });
         console.log(token)
@@ -42,7 +48,7 @@ export const signup = async (req: Request, res: Response) => {
 export const me = async (req: AuthMiddleware.CustomRequest, res: Response) => {
     try {
         const user = req.user as User;
-        res.send({ id: user.id, email: user.email });
+        res.send({ user });
     } catch (error) {
         console.error(error);
         res.status(500).send(INTERNAL_SERVER_ERROR_MESSAGE);

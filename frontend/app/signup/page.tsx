@@ -93,7 +93,9 @@ const SignUp: React.FC = () => {
                         </Button>
                         <CardFooter className="flex justify-center mt-6">
                             <CardDescription>Already have an account?</CardDescription>
-                            <Button className="ml-2" onClick={() => router.push("/login")}>
+                            <Button className="ml-2" onClick={(e) => {
+                                e.preventDefault();
+                                router.push("/login")}}>
                                 Login
                             </Button>
                         </CardFooter>

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useContext, useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -37,8 +37,7 @@ const Login: React.FC = () => {
         }
 
         return false;
-    }
-
+    };
 
     return (
         <div className="flex min-h-screen w-screen flex-col justify-center items-center">
@@ -48,7 +47,9 @@ const Login: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit} className="flex flex-col">
-                        <label htmlFor="email" className="font-semibold">Email</label>
+                        <label htmlFor="email" className="font-semibold">
+                            Email
+                        </label>
                         <input
                             type="email"
                             id="email"
@@ -72,8 +73,16 @@ const Login: React.FC = () => {
 
                         {/* Signup */}
                         <CardFooter className="flex justify-center mt-6">
-                            <CardDescription>Don't have an account?</CardDescription>
-                            <Button className="ml-2" onClick={()=> router.push('/signup')}>Signup</Button>
+                            <CardDescription>Don&apos;t have an account?</CardDescription>
+                            <Button
+                                className="ml-2"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    router.push("/signup");
+                                }}
+                            >
+                                Signup
+                            </Button>
                         </CardFooter>
                     </form>
                 </CardContent>

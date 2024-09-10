@@ -52,8 +52,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
             // call api to get user data
             const data = await meApi();
+            console.log(data);
             if (data.user) {
+                console.log(data.user);
                 setUser(data.user);
+                router.push('/dashboard');
             }
         } catch (error) {
             console.error(error);
