@@ -16,6 +16,10 @@ app.use(express.json());
 // Routes
 app.use('/api/v1', routes);
 
+app.get('/', (_, res) => {
+  res.send('Hello World');
+})
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
