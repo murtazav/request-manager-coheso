@@ -54,7 +54,7 @@ export const columns: ColumnDef<DataRequest>[] = [
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             onClick={() => {
-                                window.location.href= `/add-or-update-request?id=${dataRequest?.id}`
+                                window.location.href = `/add-or-update-request?id=${dataRequest?.id}`
                             }}
                         >
                             Update

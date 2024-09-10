@@ -33,7 +33,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             if (data.token && data.user) {
                 localStorage.setItem("token", data.token);
                 setUser(data.user);
-                router.push("/dashboard");
+                if(['/login','/signup'].includes(window.location.pathname))
+                    router.push("/dashboard");
             }
         } catch (error) {
             console.error(error);
@@ -56,7 +57,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             if (data.user) {
                 console.log(data.user);
                 setUser(data.user);
-                router.push('/dashboard');
+                if(['/login','/signup'].includes(window.location.pathname))
+                    router.push("/dashboard");
             }
         } catch (error) {
             console.error(error);
@@ -75,6 +77,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             if (data.token && data.user) {
                 localStorage.setItem("token", data.token);
                 setUser(data.user);
+                if(['/login','/signup'].includes(window.location.pathname))
                 router.push("/dashboard");
             }
         } catch (error) {

@@ -59,7 +59,7 @@ const formSchema = z.object({
 
 const AddRequest = () => {
     const router = useRouter();
-    const [loading, setloading] = useState(false);
+    const [loading, setloading] = useState(true);
     const search = useSearchParams();
     const id = search.get("id");
 
@@ -69,12 +69,16 @@ const AddRequest = () => {
             form.reset(data.dataRequest);
         } catch (error) {
             console.error(error);
+        } finally {
+            setloading(false);
         }
     };
 
     useEffect(() => {
         if (id) {
             getData(parseInt(id));
+        } else {
+            setloading(false);
         }
     }, [id]);
 
