@@ -1,15 +1,20 @@
 "use client";
+import FullPageLoader from "@/components/custom/FullPageLoader";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useFieldArray } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { createDataRequestApi, getDataRequestByIdApi, getDataRequestsApi, updateDataRequestApi } from "@/services/api-services";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import { z } from "zod";
+
+const isUnique = (arr: any[]) => new Set(arr).size === arr.length;
 
 // Schema for validation
 const formSchema = z.object({
@@ -30,7 +35,9 @@ const formSchema = z.object({
                 description: z.string().min(4, {
                     message: "Description must be at least 4 characters.",
                 }),
-                boundValues: z.array(z.string()).optional(),
+                boundValues: z.array(z.string()).refine(isUnique, {
+                    message: "Bound values must be unique.",
+                }).optional(),
             })
             .superRefine((data, ctx) => {
                 if (["tags", "option"].includes(data.format)) {
@@ -48,6 +55,24 @@ const formSchema = z.object({
 
 const AddRequest = () => {
     const router = useRouter();
+    const [loading, setloading] = useState(false);
+    const search = useSearchParams();
+    const id = search.get("id");
+
+    const getData = async (id: number) => {
+        try {
+            const data = await getDataRequestByIdApi(id);
+            form.reset(data.dataRequest);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        if (id) {
+            getData(parseInt(id));
+        }
+    }, [id]);
 
     // Initialize the form
     const form = useForm<z.infer<typeof formSchema>>({
@@ -85,14 +110,28 @@ const AddRequest = () => {
     };
 
     // Form submit handler
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        try {
+            setloading(true);
+            const res = id ? await updateDataRequestApi({...values, id: parseInt(id)}) : await createDataRequestApi(values);
+            if (res) {
+                router.push("/dashboard");
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setloading(false);
+        }
+    };
+
+    if (loading) {
+        return <FullPageLoader />;
     }
 
     return (
         <div className="flex min-h-screen w-screen flex-col overflow-x-hidden">
             <div className="fixed w-screen h-[56px] bg-gray-900 flex items-center justify-between px-12">
-                <p className="text-white text-xl">Add Requests</p>
+                <p className="text-white text-xl">{`${id ? 'Update':'Add'}`} Request</p>
                 <Button onClick={() => router.push("/dashboard")}>
                     <X size={20} color="white" />
                 </Button>
@@ -285,10 +324,8 @@ const AddRequest = () => {
 
                         {/* Submit Button */}
                         <Button type="submit" className="h-14 w-full flex gap-2 text-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ffffff" viewBox="0 0 256 256">
-                                <path d="M232,200a8,8,0,0,1-16,0,88.1,88.1,0,0,0-88-88H51.31l34.35,34.34a8,8,0,0,1-11.32,11.32l-48-48a8,8,0,0,1,0-11.32l48-48A8,8,0,0,1,85.66,61.66L51.31,96H128A104.11,104.11,0,0,1,232,200Z"></path>
-                            </svg>
                             Submit
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ffffff" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg>
                         </Button>
                     </form>
                 </Form>

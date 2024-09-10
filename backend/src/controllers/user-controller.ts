@@ -40,6 +40,11 @@ export const signup = async (req: Request, res: Response) => {
 }
 
 export const me = async (req: AuthMiddleware.CustomRequest, res: Response) => {
-    const user = req.user as User;
-    res.send({ id: user.id, email: user.email });
+    try {
+        const user = req.user as User;
+        res.send({ id: user.id, email: user.email });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(INTERNAL_SERVER_ERROR_MESSAGE);
+    }
 }

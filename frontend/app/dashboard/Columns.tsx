@@ -9,44 +9,45 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DataRequest } from "@/types/data-request";
+import { useRouter } from "next/navigation";
+import { deleteDataRequestApi } from "@/services/api-services";
 
-export type Payment = {
-    id: string;
-    amount: number;
-    status: "pending" | "processing" | "success" | "failed";
-    email: string;
-};
-
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<DataRequest>[] = [
     {
-        accessorKey: "status",
-        header: "Status",
+        accessorKey: "requestType",
+        header: "Request Type",
     },
     {
-        accessorKey: "email",
-        header: "Email",
+        accessorKey: "purpose",
+        header: "Purpose",
     },
     {
-        accessorKey: "amount",
-        header: "Amount",
+        accessorKey: "createdAt",
+        header: "Created At",
         cell: ({ row }) => {
-            const amount = parseFloat(row.getValue("amount"));
-            const formatted = new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-            }).format(amount);
-
-            return <div className="font-medium">{formatted}</div>;
+            const request = row.original;
+            return request?.createdAt ? new Date(request.createdAt).toLocaleDateString() : '';
         },
     },
     {
         header: "Actions",
         id: "actions",
         cell: ({ row }) => {
-            const payment = row.original;
+            const router = useRouter();
+            const dataRequest = row.original;
+
+            const deleteDataRequest = async () => {
+                try {
+                    await deleteDataRequestApi(dataRequest.id as number);
+                    window.location.reload();
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -57,10 +58,13 @@ export const columns: ColumnDef<Payment>[] = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>Copy payment ID</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>View customer</DropdownMenuItem>
-                        <DropdownMenuItem>View payment details</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(dataRequest?.id?.toString() ?? "")}>
+                            Copy Request ID
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={()=>{
+                            router.push(`/add-or-update-request?id=${dataRequest?.id}`);
+                        }}>Update</DropdownMenuItem>
+                        <DropdownMenuItem onClick={deleteDataRequest}>Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );

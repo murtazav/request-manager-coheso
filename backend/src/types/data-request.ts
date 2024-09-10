@@ -1,5 +1,5 @@
 export type DataRequest = {
-    id: number;
+    id?: number;
     requestType: string;
     info: Array<DataField>;
     createdAt: number;
