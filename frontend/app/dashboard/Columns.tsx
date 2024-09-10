@@ -54,8 +54,7 @@ export const columns: ColumnDef<DataRequest>[] = [
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             onClick={() => {
-                                // router.push(`/add-or-update-request?id=${dataRequest?.id}`);
-                                window.history.pushState({}, "", `/add-or-update-request?id=${dataRequest?.id}`);
+                                window.location.href= `/add-or-update-request?id=${dataRequest?.id}`
                             }}
                         >
                             Update
