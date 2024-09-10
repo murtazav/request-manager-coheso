@@ -1,0 +1,60 @@
+{
+  "users": [
+    {
+      "id": 1725914454786,
+      "email": "john@acme.inc",
+      "passwordHashed": "123456",
+      "createdAt": 1725914454786
+    },
+    {
+      "id": 1725955559540,
+      "email": "murtazaroxx@yahoo.in",
+      "passwordHashed": "1234",
+      "createdAt": 1725955559540
+    },
+    {
+      "id": 1725956737736,
+      "email": "csdcs@dsds.com",
+      "passwordHashed": "1234",
+      "createdAt": 1725956737736
+    }
+  ],
+  "dataRequests": [
+    {
+      "requestType": "csds",
+      "purpose": "csdsdc",
+      "info": [],
+      "createdBy": 1725914454786,
+      "id": 1725953810439,
+      "createdAt": 1725953810439
+    },
+    {
+      "requestType": "ccscsd",
+      "purpose": "csdscds",
+      "info": [
+        {
+          "format": "tags",
+          "isRequired": false,
+          "name": "cdscdd",
+          "description": "gggg",
+          "boundValues": [
+            "sxsxs",
+            "xsxs"
+          ]
+        }
+      ],
+      "createdBy": 1725914454786,
+      "id": 1725953868380,
+      "createdAt": 1725953868380
+    },
+    {
+      "requestType": "scds",
+      "purpose": "cdsd",
+      "info": [],
+      "createdBy": 1725955559540,
+      "id": 1725955574801,
+      "createdAt": 1725955574801
+    }
+  ],
+  "requestTypes": []
+}
